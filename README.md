@@ -2,6 +2,46 @@
 
 This repository contains scripts designed to run machine learning tasks, focusing especially on fine-tuning transformer-based models for sequence-to-sequence tasks.
 
+## Setting up a Virtual Environment
+
+Before installing the required packages, it's recommended to create a Python virtual environment. This ensures that the packages required for this project do not interfere with packages of other projects or the system's global Python environment.
+
+### For bash shell:
+
+```bash
+# Create a virtual environment named 'myenv' or any name you prefer
+python3 -m venv ./myenv
+
+# Activate the virtual environment
+source myenv/bin/activate
+```
+
+### For fish shell:
+
+```fish
+# Create a virtual environment named 'myenv' or any name you prefer
+python3 -m venv ./myenv
+
+# Activate the virtual environment
+source myenv/bin/activate.fish
+```
+
+Once you're done working in the virtual environment:
+
+### For bash shell:
+
+```bash
+deactivate
+```
+
+### For fish shell:
+
+```fish
+deactivate
+```
+
+After setting up and activating the virtual environment, you can proceed to install the required packages as mentioned in the [Installation](#installation) section.
+
 ## Installation
 
 **Prerequisites:**
@@ -51,7 +91,3 @@ pip install datasets evaluate sacrebleu sentencepiece accelerate sacremoses tran
 
 - [HuggingFace Documentation](https://huggingface.co/transformers/)
 - [PyTorch Installation Guide](https://pytorch.org/get-started/locally/)
-  
----
-
-This README should give a good starting point for your users. Adjustments can be made based on specific requirements and changes in your repository.
