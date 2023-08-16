@@ -53,7 +53,7 @@ tokenized_test = combinedTest.map(preprocess_function, batched=True)
 model = AutoModelForSeq2SeqLM.from_pretrained(checkpoint)    
     
 training_args = Seq2SeqTrainingArguments(
-    output_dir="combined_training",
+    output_dir="./outputs/combined_training",
     evaluation_strategy="epoch",
     learning_rate=2e-5,
     per_device_train_batch_size=32,
@@ -76,4 +76,4 @@ trainer = Seq2SeqTrainer(
 )
 
 trainer.train()
-trainer.save_model("./combined_train")
+trainer.save_model("./outputs/combined_train")

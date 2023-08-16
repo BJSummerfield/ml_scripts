@@ -45,7 +45,7 @@ tokenized_books = books.map(preprocess_function, batched=True)
 model = AutoModelForSeq2SeqLM.from_pretrained(checkpoint)    
     
 training_args = Seq2SeqTrainingArguments(
-    output_dir="first_training",
+    output_dir="./outputs/first_training",
     evaluation_strategy="epoch",
     learning_rate=2e-5,
     per_device_train_batch_size=16,
@@ -68,4 +68,4 @@ trainer = Seq2SeqTrainer(
 )
 
 trainer.train()
-trainer.save_model("./first_train")
+trainer.save_model("./outputs/first_train")
