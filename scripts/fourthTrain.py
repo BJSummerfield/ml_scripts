@@ -1,17 +1,12 @@
-from datasets import load_dataset, concatenate_datasets
+from datasets import load_dataset 
 from transformers import AutoTokenizer, DataCollatorForSeq2Seq, AutoModelForSeq2SeqLM, Seq2SeqTrainingArguments, Seq2SeqTrainer
 
 import evaluate
 import numpy as np
 
-books = load_dataset("opus100", "en-ja")
-subtitles = load_dataset("open_subtitles", lang1="en", lang2="ja").remove_columns(['id', 'meta'])
-subtitlesWithTest = subtitles['train'].train_test_split(test_size=0.1)
+train = load_dataset('json', data_files='./dataSets/testData.json') 
 
-combinedTrain = concatenate_datasets([books['train'], subtitlesWithTest['train']])
-combinedTest = concatenate_datasets([books['test'], subtitlesWithTest['test']])
-
-checkpoint = "staka/fugumt-en-ja"
+checkpoint = "./outputs/combined_train"
 
 tokenizer = AutoTokenizer.from_pretrained(checkpoint)
 
@@ -47,20 +42,19 @@ def compute_metrics(eval_preds):
     result = {k: round(v, 4) for k, v in result.items()}
     return result
     
-tokenized_train = combinedTrain.map(preprocess_function, batched=True)
-tokenized_test = combinedTest.map(preprocess_function, batched=True)
+tokenized_data = train['train'].map(preprocess_function, batched=True)
 
 model = AutoModelForSeq2SeqLM.from_pretrained(checkpoint)    
     
 training_args = Seq2SeqTrainingArguments(
-    output_dir="./outputs/combined_training",
+    output_dir="./outputs/companyName",
     evaluation_strategy="epoch",
     learning_rate=2e-5,
-    per_device_train_batch_size=32,
-    per_device_eval_batch_size=32,
+    per_device_train_batch_size=1,
+    per_device_eval_batch_size=1,
     weight_decay=0.01,
     save_total_limit=3,
-    num_train_epochs=1,
+    num_train_epochs=10,
     predict_with_generate=True,
     fp16=True,
 )
@@ -68,12 +62,12 @@ training_args = Seq2SeqTrainingArguments(
 trainer = Seq2SeqTrainer(
     model=model,
     args=training_args,
-    train_dataset=tokenized_train,
-    eval_dataset=tokenized_test,
+    train_dataset=tokenized_data,
+    eval_dataset=tokenized_data,
     tokenizer=tokenizer,
     data_collator=data_collator,
     compute_metrics=compute_metrics,
 )
 
 trainer.train()
-trainer.save_model("./outputs/combined_train")
+trainer.save_model("./outputs/companyName")
